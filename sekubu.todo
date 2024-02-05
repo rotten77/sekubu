@@ -1,3 +1,4 @@
 Sekubu:
-    ☐ In case of raised exception, display modal window with error message
-    ☐ Switch to hoffstadt/DearPyGui
+    ✔ In case of raised exception, display modal window with error message @done(24-02-05 22:21)
+    ✔ Switch to hoffstadt/DearPyGui @done(24-02-05 22:21)
+    ☐ Icon is not displayed after building the app

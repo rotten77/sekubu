@@ -1,10 +1,12 @@
 import xml.etree.ElementTree as ET
-import PySimpleGUI as sg
+# import PySimpleGUI as sg
 import os
 
 from sebuku_example import create_example_config
 
 def sekubu_parser(file_path: str):
+
+    config = {'theme': 'dark', 'width': 250, 'height': 250}
 
     if not os.path.exists(file_path):
         create_example_config(file_path)
@@ -12,56 +14,46 @@ def sekubu_parser(file_path: str):
     try:
         tree = ET.parse(file_path)
     except:
-        raise Exception(f'Error parsing {file_path}')
+        return {'exception': f'Error parsing {file_path}', 'config': config}
+        # raise Exception(f'Error parsing {file_path}')
     
     root = tree.getroot()
 
+    # layout = []
+    # layout_tabs = []
     layout = []
-    layout_tabs = []
-    commands = {}
-    config = {}
+    # commands = {}
 
     if 'theme' in root.attrib:
-        config['theme'] = root.get('theme')
-    else:
-        config['theme'] = 'DarkGrey3'
+        theme = root.get('theme').lower()
+        config['theme'] = theme if theme in ['dark', 'light'] else 'dark'
 
-    g=0;
-    for group in root.findall('group'):
-        group_layout = []
-        g+=1
-        try:
-            group_name = group.find('name').text
-        except:
-            raise ValueError(f'No name found for group #{g}')
-        
-        b=0
-        for element in group:
+    if 'width' in root.attrib:
+        config['width'] = int(root.get('width')) if root.get('width').isdigit() else 250
 
-            if element.tag == 'separator':
-                group_layout.append([sg.HorizontalSeparator()])
-            if element.tag == 'header':
-                group_layout.append([sg.Text(element.text,size=(48, 1))])
-            if element.tag == 'text':
-                group_layout.append([sg.Text(element.text)])
-            if element.tag == 'button':
-                b+=1
-                if 'label' not in element.attrib:
-                    raise ValueError(f'No label found for button #{b} in group {group_name}')
-                else:
-                    label = element.get('label')
-                
-                command_key = f'button_{g}_{b}'
-                group_layout.append([sg.Button(label, key=command_key)])
-                commands[command_key] = element.text
+    if 'height' in root.attrib:
+        config['height'] = int(root.get('height')) if root.get('height').isdigit() else 250
+  
+    
+    i=0
+    for element in root:
 
-        layout_tabs.append([sg.Tab(group_name, group_layout)])
-                
-    layout.append([sg.TabGroup(layout_tabs)])
-    layout.append([sg.Button('Exit')])
+        if element.tag == 'separator':
+            layout.append({'type': 'separator'})
+        if element.tag == 'text':
+            layout.append({'type': 'text', 'content': element.text})
+        if element.tag == 'button':
+            i+=1
+            if 'label' not in element.attrib:
+                return {'exception': f'Error parsing {file_path}', 'config': config}
+                # raise ValueError(f'No label found for button #{b} ')
+            else:
+                label = element.get('label')
+            
+            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text})
 
     return {
         'layout': layout,
-        'commands': commands,
-        'config': config
+        'config': config,
+        'exception': ''
     }
