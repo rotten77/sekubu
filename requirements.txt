@@ -1,2 +1,2 @@
-PySimpleGUI==4.60.5
-PySimpleGUI==4.60.5
+dearpygui==1.10.1
+dearpygui_ext==0.9.5
