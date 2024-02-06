@@ -5,7 +5,7 @@ from dearpygui_ext.themes import create_theme_imgui_dark, create_theme_imgui_lig
 import shlex, subprocess
 import os, sys
 
-VERSION = '0.1.3'
+VERSION = '0.1.4'
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -45,9 +45,9 @@ def run_command(sender):
     except Exception as e:
         show_info('Exception', f'Executing the command was not successful: {e}')
 
-def resize_windows():
-    sekubu_config('sekubu.xml', 'width', str(dpg.get_viewport_client_width()))
-    sekubu_config('sekubu.xml', 'height', str(dpg.get_viewport_client_height()))
+def resize_windows(sender, app_data, user_data):
+    sekubu_config('sekubu.xml', {'width': str(app_data[0]), 'height': str(app_data[1])})
+
 
 def create_gui(data):
 
@@ -55,8 +55,6 @@ def create_gui(data):
 
     theme = create_theme_imgui_dark() if data['config']['theme'] == 'dark' else create_theme_imgui_light()
     dpg.bind_theme(theme)
-    
-    print(data['config'])
 
     with dpg.window(tag="sekubu_window"):
         if data['exception']!="":

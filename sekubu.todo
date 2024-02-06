@@ -1,4 +1,8 @@
 Sekubu:
     ✔ In case of raised exception, display modal window with error message @done(24-02-05 22:21)
     ✔ Switch to hoffstadt/DearPyGui @done(24-02-05 22:21)
-    ☐ Icon is not displayed after building the app
+    ✘ Icon is not displayed after building the app @cancelled(24-02-05 22:26)
+    ✔ Resizing not working correctly @done(24-02-06 18:39)
+    ☐ Refactor code to use classes
+    ✔ Config read/write argument should be dict @done(24-02-06 18:39)
+    ✘ Another TK window collision? - generic PyInstaller issue @cancelled(24-02-06 13:56)
