@@ -5,7 +5,7 @@ from dearpygui_ext.themes import create_theme_imgui_dark, create_theme_imgui_lig
 import shlex, subprocess
 import os, sys
 
-VERSION = '0.1.4'
+VERSION = '1.0.0'
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
