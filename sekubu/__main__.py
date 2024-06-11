@@ -5,7 +5,7 @@ from dearpygui_ext.themes import create_theme_imgui_dark, create_theme_imgui_lig
 import shlex, subprocess
 import os, sys
 
-VERSION = '1.0.0'
+VERSION = '1.1.4'
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -41,7 +41,18 @@ def run_command(sender):
     except Exception as e:
         show_info('Exception', f'Parsing the command was not successful: {e}')
     try:
-        subprocess.Popen(args, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        if result["new_console"] == True:
+            subprocess.Popen(args, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        else:
+            process = subprocess.Popen(args, creationflags=subprocess.CREATE_NO_WINDOW, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if result["show_output"] in ['always', 'if_not_empty']:
+                stdout, stderr = process.communicate()
+                stdout = stdout.decode('utf-8')
+
+                if result["show_output"] == 'if_not_empty' and len(stdout) == 0:
+                    return
+                show_info(f"{result['label']}:", stdout)
+
     except Exception as e:
         show_info('Exception', f'Executing the command was not successful: {e}')
 
@@ -55,7 +66,7 @@ def create_gui(data):
 
     theme = create_theme_imgui_dark() if data['config']['theme'] == 'dark' else create_theme_imgui_light()
     dpg.bind_theme(theme)
-
+    
     with dpg.window(tag="sekubu_window"):
         if data['exception']!="":
             dpg.add_text(data['exception'])

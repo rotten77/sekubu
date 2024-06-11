@@ -6,3 +6,4 @@ Sekubu:
     ☐ Refactor code to use classes
     ✔ Config read/write argument should be dict @done(24-02-06 18:39)
     ✘ Another TK window collision? - generic PyInstaller issue @cancelled(24-02-06 13:56)
+    ✔ Allow to run command in background @done(24-06-02 09:38)

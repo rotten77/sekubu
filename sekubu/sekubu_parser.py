@@ -50,7 +50,25 @@ def sekubu_parser(file_path: str):
             else:
                 label = element.get('label')
             
-            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text})
+            new_console = True
+            if 'new_console' in element.attrib:
+                new_console_attr = element.get('new_console').lower().strip()
+                if new_console_attr == "false":
+                    new_console = False
+
+
+            show_output = 'never'
+            if new_console == False:
+                if 'show_output' in element.attrib:
+                    show_output = element.get('show_output').lower().strip()
+                    if show_output=='true':
+                        show_output = 'always'
+                    elif show_output=='false':
+                        show_output = 'never'
+                    if show_output not in ['never', 'always', 'if_not_empty']:
+                        show_output = 'never'
+            
+            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text, 'new_console': new_console, 'show_output': show_output})
 
     return {
         'layout': layout,

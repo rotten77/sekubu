@@ -19,6 +19,15 @@ You can add these elements:
 
     <button label="Click me!">run_this_app.exe</button>
 
+* *Attributes:*
+
+  * `label`
+  * `new_console` *[default: True]*: runs the command in a new window (`subprocess.CREATE_NEW_CONSOLE`) or in background (`subprocess.CREATE_NO_WINDOW`)
+  * `show_output` *[default: 'never']*: shows `stdout` in a modal dialog if `new_console=false`, possible options are:
+    * `never`
+    * `always`
+    * `if_not_empty`
+
 **Text** can be used as a section separator or for some fancy notes.
 
     <text>Some fancy text note</text>
@@ -44,3 +53,18 @@ Executing PowerShell script with `-NoExit` tag so the window will not close afte
 It's also possible to just run commands right from the app (`ipconfig /all` in this case):
 
     <button label="ipconfig">powershell.exe -NoExit -Command "ipconfig /all"</button>
+
+Run the command in background and show stdout after it's executed:
+    
+    <button label="Hello World!" new_console="false" show_output="if_not_empty">powershell.exe -Command "Write-Host 'Hello World!'"</button>
+
+## Changelog
+
+
+*1.1.4*
+
+* Command can be executed in background using new attribute `new_console`
+
+*1.0*
+
+* First version of Sekubu released!
