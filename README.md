@@ -15,14 +15,14 @@ Sekubu is a simple GUI command and/or script runner.
 
 You can add these elements:
 
-**Button** is the foundation of Sekubu. You have to set the command that will be run and label of the button as well.
+**Button** is the foundation of Sekubu. You have to set the command that will be run and the label of the button as well.
 
     <button label="Click me!">run_this_app.exe</button>
 
 * *Attributes:*
 
   * `label`
-  * `new_console` *[default: True]*: runs the command in a new window (`subprocess.CREATE_NEW_CONSOLE`) or in background (`subprocess.CREATE_NO_WINDOW`)
+  * `new_console` *[default: True]*: runs the command in a new window (`subprocess.CREATE_NEW_CONSOLE`) or in the background (`subprocess.CREATE_NO_WINDOW`)
   * `show_output` *[default: 'never']*: shows `stdout` in a modal dialog if `new_console=false`, possible options are:
     * `never`
     * `always`
@@ -32,11 +32,11 @@ You can add these elements:
 
     <text>Some fancy text note</text>
 
-**Separator** is just a horizontal line. Can be useful in case of a big amount of buttons.
+**The separator** is just a horizontal line. It can be useful in case of a big amount of buttons.
 
     <separator/>
 
-You can set `light` or `dark` theme in the root element `<sekubu>`. Don't worry about `width` and `height`, you can resize the window with the mouse and the size will be saved.
+You can set a `light` or `dark` theme in the root element `<sekubu>`. Don't worry about `width` and `height`, you can resize the window with the mouse and the size will be saved.
 
     <sekubu theme="dark" width="264" height="303">
 
@@ -54,17 +54,33 @@ It's also possible to just run commands right from the app (`ipconfig /all` in t
 
     <button label="ipconfig">powershell.exe -NoExit -Command "ipconfig /all"</button>
 
-Run the command in background and show stdout after it's executed:
+Run the command in the background and show stdout after it's executed:
     
     <button label="Hello World!" new_console="false" show_output="if_not_empty">powershell.exe -Command "Write-Host 'Hello World!'"</button>
+
+Run a Python script:
+
+    <button label="Python script">powershell "C:\...\python.exe .\my_python_script.py"</button>
+
+Run a script using Windows Terminal:
+
+    <button label="Windows Terminal">wt powershell.exe "./my_script.ps1"</button>
+
+Run a script inside a defined location/folder:
+
+    <button label="My script">powershell "Set-Location C:\my_folder\; ./my_script.cmd"</button>
+
+Open a desired folder in Windows Explorer:
+
+    <button label="Open C:\my_folder">explorer "C:\my_folder"</button>
 
 ## Changelog
 
 
 *1.1.4*
 
-* Command can be executed in background using new attribute `new_console`
+* A command can be executed in the background using the new attribute `new_console`.
 
 *1.0*
 
-* First version of Sekubu released!
+* The first version of Sekubu.
