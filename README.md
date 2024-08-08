@@ -70,9 +70,13 @@ Run a script inside a defined location/folder:
 
     <button label="My script">powershell "Set-Location C:\my_folder\; ./my_script.cmd"</button>
 
-Open a desired folder in Windows Explorer:
+Open a desired local folder in Windows Explorer:
 
     <button label="Open C:\my_folder">explorer "C:\my_folder"</button>
+
+Open a desired network folder in Windows Explorer:
+
+    <button label="Open C:\my_folder">explorer "\\\\network_path\\folder"</button>
 
 ## Changelog
 
