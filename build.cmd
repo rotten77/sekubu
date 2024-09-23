@@ -1,1 +1,1 @@
-pyinstaller sekubu.spec
+python -m PyInstaller sekubu.spec
