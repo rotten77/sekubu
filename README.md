@@ -2,6 +2,18 @@
 
 Sekubu is a simple GUI command and/or script runner.
 
+## Installation
+
+### Prerequisites
+
+- Install [PyInstaller](https://pyinstaller.org/en/stable/): `pip install -U pyinstaller`
+- Install [Dear PyGui](https://github.com/hoffstadt/DearPyGui): `pip install dearpygui`
+- Install [Dear PyGui Extensions](https://github.com/hoffstadt/DearPyGui_Ext): `pip install dearpygui_ext`
+
+### Building
+
+To create a windows executable, run the `build.cmd` script from the command line. If you have just installed PyInstaller, you may need to reopen the command line.
+
 ## How it works
 
 1) Edit the config file `sekubu.xml`  and define your commands or scripts (the example config file will be generated after the first run). See the config description below.
