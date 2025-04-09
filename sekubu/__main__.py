@@ -1,11 +1,12 @@
 from sekubu_parser import sekubu_parser
 from sekubu_config import sekubu_config
+from materialpallete_colors import pallete
 import dearpygui.dearpygui as dpg
 from dearpygui_ext.themes import create_theme_imgui_dark, create_theme_imgui_light
 import shlex, subprocess
 import os, sys
 
-VERSION = '1.1.4'
+VERSION = '1.2.0'
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -59,7 +60,6 @@ def run_command(sender):
 def resize_windows(sender, app_data, user_data):
     sekubu_config('sekubu.xml', {'width': str(app_data[0]), 'height': str(app_data[1])})
 
-
 def create_gui(data):
 
     dpg.create_context()
@@ -77,7 +77,26 @@ def create_gui(data):
                 if item['type'] == 'text':
                     dpg.add_text(item['content'])
                 if item['type'] == 'button':
-                    dpg.add_button(label=item['label'], tag=item['tag'], callback=run_command)
+                    button_id = dpg.add_button(label=item['label'], tag=item['tag'], callback=run_command)
+                
+                    button_color_default = "default_dark" if data['config']['theme'] == 'dark' else "default_light"
+
+                    if data['config']['color'] != "":
+                        button_color_default = data['config']['color']
+                    try:
+                        button_color = pallete[item['color']]
+                    except:
+                        button_color = pallete[button_color_default]
+                    
+                    print(f"Button color: {button_color.background_rgb} / {button_color.darker_rgb} / {button_color.lighter_rgb} {item['label']}")
+                    
+                    with dpg.theme() as button_theme:
+                        with dpg.theme_component(dpg.mvButton):
+                            dpg.add_theme_color(dpg.mvThemeCol_Button, button_color.background_rgb)
+                            dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, button_color.darker_rgb)
+                            dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, button_color.lighter_rgb)
+                            dpg.add_theme_color(dpg.mvThemeCol_Text, button_color.front_rgb)
+                    dpg.bind_item_theme(button_id, button_theme)
 
     
     dpg.create_viewport(title=f'Sekubu {VERSION}', width=data['config']['width'], height=data['config']['height'])

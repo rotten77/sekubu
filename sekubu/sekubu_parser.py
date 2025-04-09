@@ -6,7 +6,7 @@ from sebuku_example import create_example_config
 
 def sekubu_parser(file_path: str):
 
-    config = {'theme': 'dark', 'width': 250, 'height': 250}
+    config = {'theme': 'dark', 'width': 250, 'height': 250, 'color': ''}
 
     if not os.path.exists(file_path):
         create_example_config(file_path)
@@ -15,14 +15,10 @@ def sekubu_parser(file_path: str):
         tree = ET.parse(file_path)
     except:
         return {'exception': f'Error parsing {file_path}', 'config': config}
-        # raise Exception(f'Error parsing {file_path}')
     
     root = tree.getroot()
 
-    # layout = []
-    # layout_tabs = []
     layout = []
-    # commands = {}
 
     if 'theme' in root.attrib:
         theme = root.get('theme').lower()
@@ -33,7 +29,9 @@ def sekubu_parser(file_path: str):
 
     if 'height' in root.attrib:
         config['height'] = int(root.get('height')) if root.get('height').isdigit() else 250
-  
+
+    if 'color' in root.attrib:
+        config['color'] = str(root.get('color')).lower().strip()
     
     i=0
     for element in root:
@@ -46,7 +44,6 @@ def sekubu_parser(file_path: str):
             i+=1
             if 'label' not in element.attrib:
                 return {'exception': f'Error parsing {file_path}', 'config': config}
-                # raise ValueError(f'No label found for button #{b} ')
             else:
                 label = element.get('label')
             
@@ -67,8 +64,12 @@ def sekubu_parser(file_path: str):
                         show_output = 'never'
                     if show_output not in ['never', 'always', 'if_not_empty']:
                         show_output = 'never'
+
+            color = "default"
+            if 'color' in element.attrib:
+                color = element.get('color').lower().strip()
             
-            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text, 'new_console': new_console, 'show_output': show_output})
+            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text, 'new_console': new_console, 'show_output': show_output, 'color': color})
 
     return {
         'layout': layout,
