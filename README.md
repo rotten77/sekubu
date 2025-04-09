@@ -127,6 +127,8 @@ Open a network folder in Windows Explorer:
 
 You don't need to build the application to use it. You can find the executable in [Releases](https://github.com/rotten77/sekubu/releases).
 
+Sekubu requires Python **3.11.9 or newer**. Earlier versions have not been tested and may not work as expected.
+
 To run from source, first clone the repository and install the requirements:
 
 ```

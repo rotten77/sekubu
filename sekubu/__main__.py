@@ -88,8 +88,6 @@ def create_gui(data):
                     except:
                         button_color = pallete[button_color_default]
                     
-                    print(f"Button color: {button_color.background_rgb} / {button_color.darker_rgb} / {button_color.lighter_rgb} {item['label']}")
-                    
                     with dpg.theme() as button_theme:
                         with dpg.theme_component(dpg.mvButton):
                             dpg.add_theme_color(dpg.mvThemeCol_Button, button_color.background_rgb)
