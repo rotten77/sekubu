@@ -5,8 +5,10 @@ import dearpygui.dearpygui as dpg
 from dearpygui_ext.themes import create_theme_imgui_dark, create_theme_imgui_light
 import shlex, subprocess
 import os, sys
+import pyperclip
 
-VERSION = '1.2.0'
+VERSION = '1.2.1'
+AUTOCLOSE_TIMEOUT = 3  # seconds
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -14,7 +16,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 # https://github.com/hoffstadt/DearPyGui/issues/1513
-def show_info(title, message):
+def show_info(title, message, autoclose=False):
 
     # guarantee these commands happen in the same frame
     with dpg.mutex():
@@ -31,12 +33,30 @@ def show_info(title, message):
     width = dpg.get_item_width(modal_id)
     height = dpg.get_item_height(modal_id)
     dpg.set_item_pos(modal_id, [viewport_width // 2 - width // 2, viewport_height // 2 - height // 2])
+    
+    # Auto-close after specified seconds
+    if autoclose:
+        import threading
+        import time
+        
+        def auto_close_timer():
+            time.sleep(AUTOCLOSE_TIMEOUT)
+            if dpg.does_item_exist(modal_id):
+                dpg.delete_item(modal_id)
+        
+        # Start timer in a separate thread
+        timer_thread = threading.Thread(target=auto_close_timer, daemon=True)
+        timer_thread.start()
 
 def infobox_ok(unused1, unused2, user_data):
     dpg.delete_item(user_data[0])
 
 def run_command(sender):
     result = next((command for command in data['layout'] if command.get('tag') == sender), None)
+    if result["action"] == "clipboard":
+        pyperclip.copy(result["command"])
+        show_info('Info', 'Copied to clipboard', autoclose=True)
+        return
     try:
         args = shlex.split(result["command"])
     except Exception as e:

@@ -12,7 +12,8 @@ def sekubu_parser(file_path: str):
         create_example_config(file_path)
     
     try:
-        tree = ET.parse(file_path)
+        with open(file_path, encoding='utf-8') as f:
+            tree = ET.parse(f)
     except:
         return {'exception': f'Error parsing {file_path}', 'config': config}
     
@@ -75,7 +76,13 @@ def sekubu_parser(file_path: str):
             if 'color' in element.attrib:
                 color = element.get('color').lower().strip()
             
-            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text, 'new_console': new_console, 'show_output': show_output, 'color': color})
+            action = 'command'
+            if 'action' in element.attrib:
+                action = element.get('action').lower().strip()
+                if action not in ['command', 'clipboard']:
+                    action = 'command'
+            
+            layout.append({'type': 'button', 'label': label, 'tag': f'button_{i}', 'command': element.text, 'new_console': new_console, 'show_output': show_output, 'color': color, 'action': action})
 
     return {
         'layout': layout,
