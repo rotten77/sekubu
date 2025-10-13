@@ -6,7 +6,7 @@ from sebuku_example import create_example_config
 
 def sekubu_parser(file_path: str):
 
-    config = {'theme': 'dark', 'width': 250, 'height': 250, 'color': ''}
+    config = {'theme': 'dark', 'width': 250, 'height': 250, 'color': '', 'font_scale': 1.0, 'title': ''}
 
     if not os.path.exists(file_path):
         create_example_config(file_path)
@@ -32,6 +32,12 @@ def sekubu_parser(file_path: str):
 
     if 'color' in root.attrib:
         config['color'] = str(root.get('color')).lower().strip()
+    
+    if 'font_scale' in root.attrib:
+        config['font_scale'] = float(root.get('font_scale')) if str(root.get('font_scale')).replace('.', '', 1).isdigit() else 1.0
+    
+    if 'title' in root.attrib:
+        config['title'] = str(root.get('title')).strip()
     
     i=0
     for element in root:

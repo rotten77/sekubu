@@ -63,6 +63,7 @@ def resize_windows(sender, app_data, user_data):
 def create_gui(data):
 
     dpg.create_context()
+    dpg.set_global_font_scale(data['config']['font_scale'])
 
     theme = create_theme_imgui_dark() if data['config']['theme'] == 'dark' else create_theme_imgui_light()
     dpg.bind_theme(theme)
@@ -96,8 +97,9 @@ def create_gui(data):
                             dpg.add_theme_color(dpg.mvThemeCol_Text, button_color.front_rgb)
                     dpg.bind_item_theme(button_id, button_theme)
 
-    
-    dpg.create_viewport(title=f'Sekubu {VERSION}', width=data['config']['width'], height=data['config']['height'])
+
+    title = data['config']['title'] if data['config']['title'] != "" else f'Sekubu {VERSION}'
+    dpg.create_viewport(title=title, width=data['config']['width'], height=data['config']['height'])
     dpg.setup_dearpygui()
 
     dpg.set_viewport_small_icon(resource_path('sekubu.ico'))
