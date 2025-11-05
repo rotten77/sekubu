@@ -6,7 +6,7 @@ from sebuku_example import create_example_config
 
 def sekubu_parser(file_path: str):
 
-    config = {'theme': 'dark', 'width': 250, 'height': 250, 'color': '', 'font_scale': 1.0, 'title': ''}
+    config = {'theme': 'dark', 'width': 250, 'height': 250, 'color': '', 'font_scale': 1.0, 'title': '', 'always_on_top': False}
 
     if not os.path.exists(file_path):
         create_example_config(file_path)
@@ -39,6 +39,13 @@ def sekubu_parser(file_path: str):
     
     if 'title' in root.attrib:
         config['title'] = str(root.get('title')).strip()
+    
+    if 'always_on_top' in root.attrib:
+        always_on_top_attr = root.get('always_on_top').lower().strip()
+        if always_on_top_attr == "true":
+            config['always_on_top'] = True
+        else:
+            config['always_on_top'] = False
     
     i=0
     for element in root:

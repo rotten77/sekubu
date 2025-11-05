@@ -7,7 +7,7 @@ import shlex, subprocess
 import os, sys
 import pyperclip
 
-VERSION = '1.2.1'
+VERSION = '1.2.2'
 AUTOCLOSE_TIMEOUT = 3  # seconds
 
 def resource_path(relative_path):
@@ -53,6 +53,7 @@ def infobox_ok(unused1, unused2, user_data):
 
 def run_command(sender):
     result = next((command for command in data['layout'] if command.get('tag') == sender), None)
+    print(result["command"])
     if result["action"] == "clipboard":
         pyperclip.copy(result["command"])
         show_info('Info', 'Copied to clipboard', autoclose=True)
@@ -117,13 +118,15 @@ def create_gui(data):
                             dpg.add_theme_color(dpg.mvThemeCol_Text, button_color.front_rgb)
                     dpg.bind_item_theme(button_id, button_theme)
 
-
     title = data['config']['title'] if data['config']['title'] != "" else f'Sekubu {VERSION}'
     dpg.create_viewport(title=title, width=data['config']['width'], height=data['config']['height'])
     dpg.setup_dearpygui()
 
     dpg.set_viewport_small_icon(resource_path('sekubu.ico'))
     dpg.set_viewport_large_icon(resource_path('sekubu.ico'))
+
+    if data['config']['always_on_top']:
+        dpg.set_viewport_always_top(True)
 
     dpg.show_viewport()
     dpg.set_primary_window("sekubu_window", True)
