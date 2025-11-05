@@ -1,3 +1,4 @@
 dearpygui>=2.0.0
 dearpygui_ext>=2.0.0
 pyinstaller>=6.3.0
+pyperclip>=1.8.0
